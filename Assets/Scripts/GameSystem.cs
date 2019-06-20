@@ -133,6 +133,7 @@ public class GameSystem : MonoBehaviour
             if (notMovingBallsCounter == ballsArray.Length)
             {
                 print("Todas las bolas quietas");
+                UIScript.UpdateUI(actualTurn);
                 return true;
             }
         }
@@ -167,7 +168,7 @@ public class GameSystem : MonoBehaviour
     public void PassTurn()
     {
         print("Pasando turno en el GS");
-        playersArray[actualTurn].playerPoints = pointsToAdd;
+        playersArray[actualTurn].playerPoints += pointsToAdd;
         pointsToAdd = 0;
         actualTurn++;
 

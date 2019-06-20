@@ -51,6 +51,10 @@ public class UIManager : MonoBehaviour
         GSScript = gameManager.GetComponent<GameSystem>();
     }
 
+    public void UpdateUI(int actualTurn)
+    {
+        playingTextScript.text = playersArray[actualTurn].playerName.ToString() + " (" + playersArray[actualTurn].playerPoints.ToString() + ")";
+    }
 
     public void PassTurn(int actualTurn)
     {
