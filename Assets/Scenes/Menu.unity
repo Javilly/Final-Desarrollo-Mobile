@@ -601,7 +601,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 400}
-  m_SizeDelta: {x: 600, y: 300}
+  m_SizeDelta: {x: 709.95, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &490070106
 MonoBehaviour:
@@ -636,7 +636,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Fumono Loco
+  m_Text: Bolas Juelocas
 --- !u!222 &490070107
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -775,6 +775,8 @@ MonoBehaviour:
   listPlayers: {fileID: 2113883997}
   nowPlayingText: {fileID: 0}
   playingTextScript: {fileID: 0}
+  winnerText: {fileID: 0}
+  winnerTextScript: {fileID: 0}
   gameManager: {fileID: 228790520}
 --- !u!1 &646110554
 GameObject:
@@ -1203,7 +1205,7 @@ RectTransform:
   m_GameObject: {fileID: 1017801917}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.25, y: 1.25, z: 1}
   m_Children:
   - {fileID: 1242925606}
   - {fileID: 1900657144}
