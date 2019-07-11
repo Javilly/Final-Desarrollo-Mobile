@@ -201,6 +201,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIManager: {fileID: 642899646}
+  diceImageGO: {fileID: 0}
+  diceImageScript: {fileID: 0}
+  blueDot: {fileID: 21300000, guid: 95b7547c094aeea4b8a65629abe1b6b4, type: 3}
+  greenDot: {fileID: 21300000, guid: d2507795dae3823458b267ebfb0c0318, type: 3}
+  redDot: {fileID: 21300000, guid: 4351c70c51b87734f8b0a7fc967a716a, type: 3}
   gameStarted: 0
   actualTurn: 0
   ballsArray: []

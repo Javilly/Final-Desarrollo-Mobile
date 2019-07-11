@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Stick
   - Ball
+  - BlueStick
+  - DiceUI
   layers:
   - Default
   - TransparentFX

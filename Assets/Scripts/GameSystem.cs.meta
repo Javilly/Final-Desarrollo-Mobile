@@ -3,7 +3,14 @@ guid: 4b5202ac7294e9343b861ba42e9be739
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - UIManager: {instanceID: 0}
+  - diceImageGO: {instanceID: 0}
+  - diceImageScript: {instanceID: 0}
+  - blueDot: {fileID: 21300000, guid: 95b7547c094aeea4b8a65629abe1b6b4, type: 3}
+  - greenDot: {instanceID: 0}
+  - redDot: {instanceID: 0}
+  - myGyro: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

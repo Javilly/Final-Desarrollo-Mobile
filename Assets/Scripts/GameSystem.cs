@@ -10,6 +10,13 @@ public class GameSystem : MonoBehaviour
     public GameObject UIManager;
     UIManager UIScript;
 
+    public GameObject diceImageGO;
+    public Image diceImageScript;
+
+    public Sprite blueDot;
+    public Sprite greenDot;
+    public Sprite redDot;
+
 
     //SceneManager
     string sceneToLoad;
@@ -21,17 +28,29 @@ public class GameSystem : MonoBehaviour
     public int actualQuantBalls;
     public int pointsToAdd;
 
+
     public static GameSystem instance = null;
+    bool throwFirstDice;
+    GameObject bugProtector;
+    bool ballsMoving = false;
+    int notMovingBallsCounter = 0;
+
 
     //Gyro
     public GameObject myGyro;
     Giroscopio gyroScript;
+
+
+    //Dice
+    private int diceColour;
+
 
     private void Start()
     {
         sceneToLoad = "Scene1";
         UIScript = UIManager.GetComponent<UIManager>();
     }
+
 
     private void Awake()
     {
@@ -46,11 +65,13 @@ public class GameSystem : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene("LoadingScene", LoadSceneMode.Additive);
         StartCoroutine(AScene(sceneName));
     }
+
 
     IEnumerator AScene(string sceneToLoad)
     {
@@ -63,7 +84,28 @@ public class GameSystem : MonoBehaviour
             yield return null;
         }
     }
-    
+
+
+    void ThrowDice()
+    {
+        diceImageScript = diceImageGO.GetComponent<Image>();
+        diceColour = Random.Range(0, 2);
+        print(diceColour);
+
+        if(diceColour == 0)
+        {
+            diceImageScript.sprite = blueDot;
+
+        }else if(diceColour == 1)
+        {
+            diceImageScript.sprite = greenDot;
+       
+        }else
+        {
+            diceImageScript.sprite = redDot;
+        }
+    }
+
     public void StartGame(MyPlayersInfo[] arrayPasada)
     {
         LoadScene(sceneToLoad);
@@ -73,73 +115,47 @@ public class GameSystem : MonoBehaviour
         actualQuantBalls = 0;
     }
 
+
     public void StickPicked()
     {
         print("El Giroscopio llamó al Stick Picked del GS");
 
         int testQuantBalls = 0;
 
-        if (AllBallsQuiet())
+        print("Ciclo del StickPicked en el GS");
+
+
+        for (int i = 0; i < ballsArray.Length; i++)
         {
-            print("Ciclo del StickPicked en el GS");
-
-
-            for (int i = 0; i < ballsArray.Length; i++)
+            if (ballsArray[i] != null)
             {
-                if (ballsArray[i] != null)
-                {
-                    testQuantBalls++;
-                }
+                testQuantBalls++;
             }
+        }
 
-            print("Bolas actuales: " + actualQuantBalls + "\t Bolas contadas en el test: " + testQuantBalls);
+        print("Bolas actuales: " + actualQuantBalls + "\t Bolas contadas en el test: " + testQuantBalls);
 
-            if (testQuantBalls == 0)
-            {
-                EndGame();
-            }
+        if (testQuantBalls == 0)
+        {
+            EndGame();
+        }
 
 
 
-            if (testQuantBalls <= actualQuantBalls)
-            {
-                pointsToAdd = actualQuantBalls - testQuantBalls;
-                actualQuantBalls = testQuantBalls;
-                PassTurn();
-            }
+        if (testQuantBalls <= actualQuantBalls)
+        {
+            pointsToAdd = actualQuantBalls - testQuantBalls;
+            actualQuantBalls = testQuantBalls;
+            PassTurn();
         }
     }
 
-    bool AllBallsQuiet()
+
+    void AllBallsQuiet()
     {
-        print("Entré al AllBallsQuiet en el GS");
-        bool notMoving = false;
-        int notMovingBallsCounter = 0;
-
-        while(!notMoving)
-        {
-            print("Checkeando si las bolas están quietas en el GS");
-            for (int i = 0; i < ballsArray.Length; i++)
-            {
-                if (ballsArray[i] != null && ballsArray[i].GetComponent<Rigidbody>().velocity.magnitude > 0)
-                {
-                    print("Movimiento de la bola actual: " + ballsArray[i].GetComponent<Rigidbody>().velocity.magnitude);
-                    notMoving = false;
-                    break;
-                }
-                notMovingBallsCounter++;
-            }
-
-            if (notMovingBallsCounter == ballsArray.Length)
-            {
-                print("Todas las bolas quietas");
-                UIScript.UpdateUI(actualTurn);
-                return true;
-            }
-        }
-
-        return false;
+        ballsMoving = true;
     }
+
 
     void EndGame()
     {
@@ -165,8 +181,10 @@ public class GameSystem : MonoBehaviour
         UIScript.EndGame(winner);
     }
 
+
     public void PassTurn()
     {
+        ThrowDice();
         print("Pasando turno en el GS");
         playersArray[actualTurn].playerPoints += pointsToAdd;
         pointsToAdd = 0;
@@ -181,6 +199,7 @@ public class GameSystem : MonoBehaviour
         gyroScript.canSwipeStick = true;
     }
 
+
     void Update()
     {
         if (gameStarted)
@@ -191,13 +210,54 @@ public class GameSystem : MonoBehaviour
                 gyroScript = myGyro.GetComponent<Giroscopio>();
                 ballsArray = GameObject.FindGameObjectsWithTag("Ball");
 
+                diceImageGO = GameObject.FindGameObjectWithTag("DiceUI");
+
                 for (int i = 0; i < ballsArray.Length; i++)
                 {
                     actualQuantBalls++;
                 }
             }
 
+            if (diceImageGO == null)
+            {
+                diceImageGO = GameObject.FindGameObjectWithTag("DiceUI");
+                Invoke("ThrowDice", 0.5f);
+            }
 
+            bugProtector = GameObject.Find("Bug Protector");
+
+
+
+            
+
+            if(ballsMoving)
+            {
+                notMovingBallsCounter = 0;
+                bugProtector.SetActive(true);
+
+                print("Checkeando si las bolas están quietas en el GS");
+                for (int i = 0; i < ballsArray.Length; i++)
+                {
+                    if (ballsArray[i] != null && ballsArray[i].GetComponent<Rigidbody>().velocity.magnitude > 0)
+                    {
+                        print("Movimiento de la bola actual: " + ballsArray[i].GetComponent<Rigidbody>().velocity.magnitude);
+                        ballsMoving = true;
+                        break;
+                    }
+                    notMovingBallsCounter++;
+                }
+
+                if (notMovingBallsCounter == ballsArray.Length)
+                {
+                    print("Todas las bolas quietas");
+                    UIScript.UpdateUI(actualTurn);
+                    ballsMoving = false;
+                }
+            }
+            else
+            {
+                bugProtector.SetActive(false);
+            }
         }
     }
 }

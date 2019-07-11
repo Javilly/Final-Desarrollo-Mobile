@@ -92,7 +92,7 @@ public class Giroscopio : MonoBehaviour
                     touchedObject = hit.transform.gameObject;
                     Debug.Log("Touched " + touchedObject.transform.name);
 
-                    if (touchedObject.tag == "Stick")
+                    if (touchedObject.tag == "Stick" && canSwipeStick)
                     {
                         MoveAndDestroy(touchedObject);
                     }
